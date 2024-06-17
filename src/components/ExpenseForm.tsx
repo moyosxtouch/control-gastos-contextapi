@@ -23,7 +23,7 @@ export default function ExpenseForm() {
       )[0];
       setExpense(editingExpense);
     }
-  }, [state.editingId]);
+  }, [state.editingId, state.expenses]);
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
@@ -34,12 +34,14 @@ export default function ExpenseForm() {
       [name]: isAmountField ? Number(value) : value,
     });
   };
+
   const handleChangeDate = (value: Value) => {
     setExpense({
       ...expense,
       date: value,
     });
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //Validar
@@ -53,7 +55,7 @@ export default function ExpenseForm() {
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">
-        Nuevo Gasto
+        {state.editingId ? "Guardar Cambios" : "Nuevo Gasto"}
       </legend>
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <div className="flex flex-col gap-2">
@@ -67,6 +69,7 @@ export default function ExpenseForm() {
           className="bg-slate-100 p-2"
           name="expenseName"
           onChange={handleChange}
+          value={expense.expenseName}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -80,6 +83,7 @@ export default function ExpenseForm() {
           className="bg-slate-100 p-2"
           name="amount"
           onChange={handleChange}
+          value={expense.amount}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -91,6 +95,7 @@ export default function ExpenseForm() {
           className="bg-slate-100 p-2"
           name="category"
           onChange={handleChange}
+          value={expense.category}
         >
           <option value="">--Seleccione--</option>
           {categories.map((category) => (
@@ -111,7 +116,7 @@ export default function ExpenseForm() {
       <input
         type="submit"
         className="bg-blue-600 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg"
-        value={"Registrar Gasto"}
+        value={state.editingId ? "Guardar Cambios" : "Registrar Gasto"}
       />
     </form>
   );
