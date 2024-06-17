@@ -49,9 +49,24 @@ export default function ExpenseForm() {
       setError("Todos los campos son obligatorios");
       return;
     }
-    //Agregar un nuevo gasto
-    dispatch({ type: "add-expense", payload: { expense } });
+    //Agregar o actualizar el gasto
+    if (state.editingId) {
+      dispatch({
+        type: "update-expense",
+        payload: { expense: { id: state.editingId, ...expense } },
+      });
+    } else {
+      dispatch({ type: "add-expense", payload: { expense } });
+    }
+    //reiniciar el state
+    setExpense({
+      amount: 0,
+      expenseName: "",
+      category: "",
+      date: new Date(),
+    });
   };
+
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">
